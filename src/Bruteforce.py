@@ -1,7 +1,7 @@
 from Euclid import Euclid
 
 def compute_bruteforce(points):
-    assert len(points) > 1, "list should contain at least 2 point"
+    # assert len(points) > 1, "list should contain at least 2 point"
     euclid = Euclid()
     min_dist = float('inf')
     amount = len(points)
@@ -25,6 +25,13 @@ if __name__ == "__main__":
     print()
     
     points = [[1,2,3,4], [2,3,4,5], [10,2,12,6], [4,4,4,4]]
+    call_counter, dist, closest_index = compute_bruteforce(points)
+    print(f"euclid call : {call_counter}")
+    print(f"distance : {dist}")
+    print(f"closest point : {points[closest_index[0]]}, {points[closest_index[1]]}")    
+
+    from Randomizer import *
+    points = random_points(100, 5, 1000)
     call_counter, dist, closest_index = compute_bruteforce(points)
     print(f"euclid call : {call_counter}")
     print(f"distance : {dist}")
