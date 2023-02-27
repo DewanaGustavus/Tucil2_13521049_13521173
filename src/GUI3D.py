@@ -81,6 +81,11 @@ class GUI3D:
         self.point1LabelAnswer = tkinter.Label()
         self.point2Label = tkinter.Label(text="Point 2")
         self.point2LabelAnswer = tkinter.Label()
+        
+        # error
+        self.amountError = tkinter.Label(font=("Arial", 8), fg='red')
+        self.limitError = tkinter.Label(font=("Arial", 8), fg='red')
+        self.solveError = tkinter.Label(font=("Arial", 8), fg='red')
 
     def position_button(self):
         # constant
@@ -100,10 +105,8 @@ class GUI3D:
         # input
         self.amountLabel.place(x=self.label_positionx, y=self.first_y)
         self.amountForm.place(x=self.form_positionx, y=self.first_y)
-        
         self.limitLabel.place(x=self.label_positionx, y=self.first_y + self.label_gap)
         self.limitForm.place(x=self.form_positionx, y=self.first_y + self.label_gap)
-        
         self.generateButton.place(x=self.form_positionx, y=self.first_y + 2*self.label_gap)
 
         # points
@@ -123,11 +126,28 @@ class GUI3D:
         self.point2Label.place(x=self.dist_positionx, y=self.solve_y + 3*self.dist_gapy)
 
     def update_points_text(self):
+        self.reset_error()
         self.pointsText.configure(state="normal")
         self.pointsText.delete(1.0, tkinter.END)
         for point in self.points:
             self.pointsText.insert(tkinter.END, self.point_to_string(point) + "\n")
         self.pointsText.configure(state="disabled")
+
+    def show_error(self, n_error="", limit_error="", solve_error=""):
+        if n_error != "" or limit_error != "":
+            self.amountError.config(text=n_error)            
+            self.limitError.config(text=limit_error)            
+        if solve_error != "":
+            self.solveError.config(text=solve_error)
+        
+        self.amountError.place(x=self.label_positionx, y=self.first_y + (self.label_gap)//2)
+        self.limitError.place(x=self.label_positionx, y=self.first_y + 3 * (self.label_gap)//2)
+        self.solveError.place(x=self.solve_positionx + 20, y=self.solve_y + self.solve_gapy)
+
+    def reset_error(self):
+        self.amountError.place_forget()
+        self.limitError.place_forget()
+        self.solveError.place_forget()
 
     def update_points(self):
         # get input
@@ -137,15 +157,16 @@ class GUI3D:
         # validate
         n = validate_n(n)
         n_error = type(n) == str
-        if n_error:
-            print("n")
 
         limit = validate_limit(limit)
         limit_error = type(limit) == str
-        if limit_error:
-            print("limit")
-            
+
         if n_error or limit_error:
+            if not n_error:
+                n = ""
+            if not limit_error:
+                limit = ""
+            self.show_error(n_error=n, limit_error=limit)
             return
             
         # process
@@ -205,7 +226,7 @@ class GUI3D:
 
     def start_bruteforce(self):
         if len(self.points) == 0:
-            print("generate points before start")
+            self.show_error(solve_error="generate points before start")
             return
         start = time.time()
         answer = compute_bruteforce(self.points)
@@ -214,7 +235,7 @@ class GUI3D:
             
     def start_DnC(self):
         if len(self.points) == 0:
-            print("generate points before start")
+            self.show_error(solve_error="generate points before start")
             return
         start = time.time()
         answer = compute_DnC(self.points)
