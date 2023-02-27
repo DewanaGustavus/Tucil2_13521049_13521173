@@ -1,4 +1,5 @@
 from GUI3D import GUI3D
+from GUInD import GUInD
 import tkinter
 import tkinter.ttk
 
@@ -8,7 +9,10 @@ tabControl = tkinter.ttk.Notebook(root)
 
 gui1 = GUI3D(tabControl)
 tab1 = gui1.frame
-tab2 = tkinter.ttk.Frame(tabControl)
+
+gui2 = GUInD(tabControl)
+tab2 = gui2.frame
+
 root.geometry("750x750")
 root.resizable(False, False)
 

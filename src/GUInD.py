@@ -1,42 +1,28 @@
 from Bruteforce import compute_bruteforce
 from DnC import compute_DnC
-from Randomizer import xyz_random_points
+from Randomizer import random_points
 from Util import *
 import tkinter
 import tkinter.ttk
 import time
 
-from matplotlib.backends.backend_tkagg import (
-    FigureCanvasTkAgg, NavigationToolbar2Tk)
-from matplotlib.figure import Figure
-
-class GUI3D:
+class GUInD:
     def __init__(self, root):
         self.root = root
         self.frame = tkinter.ttk.Frame(self.root)
-        # init mpl figure 
-        self.figure = Figure(figsize = (5, 5), facecolor='yellow')
-        self.axis = self.figure.add_subplot(projection="3d")
         self.points = []
-        self.points_xyz = [[], [], []]
         
         # setup button
         self.make_button()    
         self.position_button()
-        
-        # prepare canvas
-        self.canvas = FigureCanvasTkAgg(self.figure, master=self.frame)
-        self.toolbar = NavigationToolbar2Tk(self.canvas, self.root, pack_toolbar=False)
-        self.toolbar.update()
-        self.toolbar.place(x=20, y=480)
-        self.canvas.get_tk_widget().place(x=0, y=0)
-        self.canvas.draw()
         
         # for positioning debug
         self.debug_cursor()
         
     def make_button(self):
         # make generate button
+        self.dimensionLabel = tkinter.Label(text="Dimension", master=self.frame)
+        self.dimensionForm = tkinter.Entry(background='red', master=self.frame)
         self.amountLabel = tkinter.Label(text="Points", master=self.frame)
         self.amountForm = tkinter.Entry(background='red', master=self.frame)
         self.limitLabel = tkinter.Label(text="Limit", master=self.frame)
@@ -45,10 +31,10 @@ class GUI3D:
         
         # points
         self.pointsLabel = tkinter.Label(text="Points", master=self.frame)
-        self.pointsFrame = tkinter.Frame(self.root)
+        self.pointsFrame = tkinter.Frame(self.frame)
         self.pointsScrollbarY = tkinter.Scrollbar(self.pointsFrame)
         self.pointsScrollbarX = tkinter.Scrollbar(self.pointsFrame, orient="horizontal")
-        self.pointsText = tkinter.Text(self.pointsFrame, height=30, width=20, wrap="none",
+        self.pointsText = tkinter.Text(self.pointsFrame, height=30, width=55, wrap="none",
                                        yscrollcommand=self.pointsScrollbarY.set, 
                                        xscrollcommand=self.pointsScrollbarX.set, 
                                        background='green')
@@ -80,12 +66,13 @@ class GUI3D:
         
         # error
         self.amountError = tkinter.Label(font=("Arial", 8), fg='red', master=self.frame)
+        self.dimensionError = tkinter.Label(font=("Arial", 8), fg='red', master=self.frame)
         self.limitError = tkinter.Label(font=("Arial", 8), fg='red', master=self.frame)
         self.solveError = tkinter.Label(font=("Arial", 10), fg='red', master=self.frame)
 
     def position_button(self):
         # constant
-        self.label_positionx = 520
+        self.label_positionx = 490
         self.first_y = 0
         self.label_gap = 40
         self.form_positionx = 560
@@ -97,29 +84,32 @@ class GUI3D:
         self.dist_positionx = 300
         self.dist_gapy = 20
         self.text_gap = 70
+        self.error_gap = self.label_gap//2
         
         # input
-        self.amountLabel.place(x=self.label_positionx, y=self.first_y)
-        self.amountForm.place(x=self.form_positionx, y=self.first_y)
-        self.limitLabel.place(x=self.label_positionx, y=self.first_y + self.label_gap)
-        self.limitForm.place(x=self.form_positionx, y=self.first_y + self.label_gap)
-        self.generateButton.place(x=self.form_positionx, y=self.first_y + 2*self.label_gap)
+        self.dimensionLabel.place(x=self.label_positionx, y=0)
+        self.dimensionForm.place(x=self.form_positionx, y=0)
+        self.amountLabel.place(x=self.label_positionx, y=self.label_gap)
+        self.amountForm.place(x=self.form_positionx, y=self.label_gap)
+        self.limitLabel.place(x=self.label_positionx, y=2*self.label_gap)
+        self.limitForm.place(x=self.form_positionx, y=2*self.label_gap)
+        self.generateButton.place(x=self.form_positionx, y=3*self.label_gap)
 
         # points
-        self.pointsLabel.place(x=self.form_positionx, y=self.first_y + 3*self.label_gap)
-        self.pointsFrame.place(x=self.label_positionx, y=self.first_y + 4*self.label_gap)
+        self.pointsLabel.place(x=200, y=0)
+        self.pointsFrame.place(x=10, y=30)
 
         # solve
-        self.bruteButton.place(x=self.solve_positionx, y=self.solve_y)
-        self.bruteCompare.place(x=self.solve_positionx, y=self.solve_y + 2*self.solve_gapy)
-        self.bruteTime.place(x=self.solve_positionx, y=self.solve_y + 3*self.solve_gapy)
-        self.DnCButton.place(x=self.solve_positionx + self.solve_gapx, y=self.solve_y)
-        self.DnCCompare.place(x=self.solve_positionx + self.solve_gapx, y=self.solve_y + 2*self.solve_gapy)
-        self.DnCTime.place(x=self.solve_positionx + self.solve_gapx, y=self.solve_y + 3*self.solve_gapy)
-        self.closestAnswer.place(x=self.dist_positionx, y=self.solve_y)
-        self.distLabel.place(x=self.dist_positionx, y=self.solve_y + self.dist_gapy)
-        self.point1Label.place(x=self.dist_positionx, y=self.solve_y + 2*self.dist_gapy)
-        self.point2Label.place(x=self.dist_positionx, y=self.solve_y + 3*self.dist_gapy)
+        self.bruteButton.place(x=self.label_positionx, y=4*self.label_gap)
+        self.bruteCompare.place(x=self.label_positionx, y=6*self.label_gap)
+        self.bruteTime.place(x=self.label_positionx, y=7*self.label_gap)
+        self.DnCButton.place(x=self.label_positionx + self.solve_gapx, y=4*self.label_gap)
+        self.DnCCompare.place(x=self.label_positionx + self.solve_gapx, y=6*self.label_gap)
+        self.DnCTime.place(x=self.label_positionx + self.solve_gapx, y=7*self.label_gap)
+        self.closestAnswer.place(x=self.label_positionx, y=self.solve_y)
+        self.distLabel.place(x=self.label_positionx, y=self.solve_y + self.dist_gapy)
+        self.point1Label.place(x=self.label_positionx, y=self.solve_y + 2*self.dist_gapy)
+        self.point2Label.place(x=self.label_positionx, y=self.solve_y + 3*self.dist_gapy)
 
     def update_points_text(self):
         self.reset_error()
@@ -129,26 +119,30 @@ class GUI3D:
             self.pointsText.insert(tkinter.END, point_to_string(point) + "\n")
         self.pointsText.configure(state="disabled")
 
-    def show_error(self, n_error="", limit_error="", solve_error=""):
-        if n_error != "" or limit_error != "":
+    def show_error(self, n_error="", limit_error="", d_error="", solve_error=""):
+        if n_error != "" or limit_error != "" or d_error:
             self.amountError.config(text=n_error)            
-            self.limitError.config(text=limit_error)            
+            self.limitError.config(text=limit_error)
+            self.dimensionError.config(text=d_error)        
         if solve_error != "":
             self.solveError.config(text=solve_error)
         
-        self.amountError.place(x=self.label_positionx, y=self.first_y + (self.label_gap)//2)
-        self.limitError.place(x=self.label_positionx, y=self.first_y + 3 * (self.label_gap)//2)
-        self.solveError.place(x=self.solve_positionx + 20, y=self.solve_y + self.solve_gapy)
+        self.dimensionError.place(x=self.label_positionx, y=self.first_y + self.error_gap)
+        self.amountError.place(x=self.label_positionx, y=self.first_y + 3*self.error_gap)
+        self.limitError.place(x=self.label_positionx, y=self.first_y + 5*self.error_gap)
+        self.solveError.place(x=self.label_positionx + 20, y=5*self.label_gap)
 
     def reset_error(self):
         self.amountError.place_forget()
         self.limitError.place_forget()
+        self.dimensionError.place_forget()
         self.solveError.place_forget()
 
     def update_points(self):
         # get input
         n = self.amountForm.get()
         limit = self.limitForm.get()
+        d = self.dimensionForm.get()
 
         # validate
         n = validate_n(n)
@@ -156,19 +150,22 @@ class GUI3D:
 
         limit = validate_limit(limit)
         limit_error = type(limit) == str
+        
+        d = validate_d(d)
+        d_error = type(d) == str
 
-        if n_error or limit_error:
+        if n_error or limit_error or d_error:
             if not n_error:
                 n = ""
             if not limit_error:
                 limit = ""
-            self.show_error(n_error=n, limit_error=limit)
+            if not d_error:
+                d = ""
+            self.show_error(n_error=n, limit_error=limit, d_error=d)
             return
             
         # process
-        self.points_xyz = xyz_random_points(n, limit)
-        self.flatten_xyz()
-        self.update_plot()
+        self.points = random_points(n, d, limit)
         self.forget_answer()
         self.update_points_text()
     
@@ -181,37 +178,24 @@ class GUI3D:
         self.point1LabelAnswer.place_forget()
         self.point2LabelAnswer.place_forget()
     
-    def update_plot(self):
-        # points visualization
-        self.axis.remove()
-        self.axis = self.figure.add_subplot(projection="3d")
-        self.axis.scatter3D(self.points_xyz[0], self.points_xyz[1], self.points_xyz[2], color="red")
-        self.canvas.draw()
-
     def update_answer(self, method, answer, execTime):
         if method == "Bruteforce":
-            self.bruteCompareAnswer.place(x=self.solve_positionx + self.text_gap, y=self.solve_y + 2*self.solve_gapy)
+            self.bruteCompareAnswer.place(x=self.label_positionx + self.text_gap, y=6*self.label_gap)
             self.bruteCompareAnswer.config(text=answer[0])
-            self.bruteTimeAnswer.place(x=self.solve_positionx + self.text_gap, y=self.solve_y + 3*self.solve_gapy)
+            self.bruteTimeAnswer.place(x=self.label_positionx + self.text_gap, y=7*self.label_gap)
             self.bruteTimeAnswer.config(text=f"{execTime*1000:0.2f} ms")
         else:
-            self.DnCCompareAnswer.place(x=self.solve_positionx + self.solve_gapx + self.text_gap, y=self.solve_y + 2*self.solve_gapy)
+            self.DnCCompareAnswer.place(x=self.label_positionx + self.solve_gapx + self.text_gap, y=6*self.label_gap)
             self.DnCCompareAnswer.config(text=answer[0])
-            self.DnCTimeAnswer.place(x=self.solve_positionx + self.solve_gapx + self.text_gap, y=self.solve_y + 3*self.solve_gapy)
+            self.DnCTimeAnswer.place(x=self.label_positionx + self.solve_gapx + self.text_gap, y=7*self.label_gap)
             self.DnCTimeAnswer.config(text=f"{execTime*1000:0.2f} ms")
 
-        self.distLabelAnswer.place(x=self.dist_positionx + self.text_gap, y=self.solve_y + self.dist_gapy)
+        self.distLabelAnswer.place(x=self.label_positionx + self.text_gap, y=self.solve_y + self.dist_gapy)
         self.distLabelAnswer.config(text=f"{answer[1]:0.2f}")
-        self.point1LabelAnswer.place(x=self.dist_positionx + self.text_gap, y=self.solve_y + 2*self.dist_gapy)
+        self.point1LabelAnswer.place(x=self.label_positionx + self.text_gap, y=self.solve_y + 2*self.dist_gapy)
         self.point1LabelAnswer.config(text=point_to_string(self.points[answer[2][0]]))
-        self.point2LabelAnswer.place(x=self.dist_positionx + self.text_gap, y=self.solve_y + 3*self.dist_gapy)
+        self.point2LabelAnswer.place(x=self.label_positionx + self.text_gap, y=self.solve_y + 3*self.dist_gapy)
         self.point2LabelAnswer.config(text=point_to_string(self.points[answer[2][1]]))
-
-    def flatten_xyz(self):
-        x, y, z = self.points_xyz
-        self.points = []
-        for point in zip(x, y, z):
-            self.points.append(point)
 
     def start_bruteforce(self):
         if len(self.points) == 0:
@@ -251,5 +235,5 @@ def make_root():
 
 if __name__ == "__main__":
     root = make_root()
-    program = GUI3D(root)
+    program = GUInD(root)
     program.start()
