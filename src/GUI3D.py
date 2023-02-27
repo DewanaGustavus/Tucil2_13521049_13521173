@@ -3,6 +3,7 @@ from DnC import compute_DnC
 from Randomizer import xyz_random_points
 from Validator import *
 import tkinter
+import tkinter.ttk
 import numpy as np
 import time
 
@@ -14,13 +15,9 @@ from matplotlib.figure import Figure
 from mpl_toolkits import mplot3d  
 
 class GUI3D:
-    def __init__(self):
-        # init tkinter
-        self.frame = tkinter.Tk()
-        self.frame.wm_title("Closest Pair Visualizer")
-        self.frame.geometry("720x720")
-        self.frame.resizable(False, False)
-
+    def __init__(self, root):
+        self.root = root
+        self.frame = tkinter.ttk.Frame(self.root)
         # init mpl figure 
         self.figure = Figure(figsize = (5, 5), facecolor='yellow')
         self.axis = self.figure.add_subplot(projection="3d")
@@ -33,23 +30,26 @@ class GUI3D:
         
         # prepare canvas
         self.canvas = FigureCanvasTkAgg(self.figure, master=self.frame)
-        self.canvas.draw()
-        self.toolbar = NavigationToolbar2Tk(self.canvas, self.frame, pack_toolbar=False)
+        self.toolbar = NavigationToolbar2Tk(self.canvas, self.root, pack_toolbar=False)
         self.toolbar.update()
-        self.toolbar.place(x=20, y=450)
+        self.toolbar.place(x=20, y=480)
         self.canvas.get_tk_widget().place(x=0, y=0)
+        self.canvas.draw()
+        
+        # for positioning debug
+        self.debug_cursor()
         
     def make_button(self):
         # make generate button
-        self.amountLabel = tkinter.Label(text="Points")
-        self.amountForm = tkinter.Entry(background='red')
-        self.limitLabel = tkinter.Label(text="Limit")
-        self.limitForm = tkinter.Entry(background='red')
-        self.generateButton = tkinter.Button(text="Generate", command=self.update_points)
+        self.amountLabel = tkinter.Label(text="Points", master=self.frame)
+        self.amountForm = tkinter.Entry(background='red', master=self.frame)
+        self.limitLabel = tkinter.Label(text="Limit", master=self.frame)
+        self.limitForm = tkinter.Entry(background='red', master=self.frame)
+        self.generateButton = tkinter.Button(text="Generate", command=self.update_points, master=self.frame)
         
         # points
-        self.pointsLabel = tkinter.Label(text="Points")
-        self.pointsFrame = tkinter.Frame(self.frame)
+        self.pointsLabel = tkinter.Label(text="Points", master=self.frame)
+        self.pointsFrame = tkinter.Frame(self.root)
         self.pointsScrollbarY = tkinter.Scrollbar(self.pointsFrame)
         self.pointsScrollbarX = tkinter.Scrollbar(self.pointsFrame, orient="horizontal")
         self.pointsText = tkinter.Text(self.pointsFrame, height=30, width=20, wrap="none",
@@ -64,38 +64,38 @@ class GUI3D:
         self.pointsText.pack(side="left")
         
         # solve button
-        self.bruteButton = tkinter.Button(text="Bruteforce", command=self.start_bruteforce)
-        self.bruteCompare = tkinter.Label(text="Compare")
-        self.bruteTime = tkinter.Label(text="Time")
-        self.bruteCompareAnswer = tkinter.Label()
-        self.bruteTimeAnswer = tkinter.Label()
-        self.DnCButton = tkinter.Button(text="DnC", command=self.start_DnC)
-        self.DnCCompare = tkinter.Label(text="Compare")
-        self.DnCTime = tkinter.Label(text="Time")
-        self.DnCCompareAnswer = tkinter.Label()
-        self.DnCTimeAnswer = tkinter.Label()
-        self.closestAnswer = tkinter.Label(text="Closest Pair")
-        self.distLabel = tkinter.Label(text="Distance")
-        self.distLabelAnswer = tkinter.Label()
-        self.point1Label = tkinter.Label(text="Point 1")
-        self.point1LabelAnswer = tkinter.Label()
-        self.point2Label = tkinter.Label(text="Point 2")
-        self.point2LabelAnswer = tkinter.Label()
+        self.bruteButton = tkinter.Button(text="Bruteforce", command=self.start_bruteforce, master=self.root)
+        self.bruteCompare = tkinter.Label(text="Compare", master=self.root)
+        self.bruteTime = tkinter.Label(text="Time", master=self.root)
+        self.bruteCompareAnswer = tkinter.Label(self.root)
+        self.bruteTimeAnswer = tkinter.Label(self.root)
+        self.DnCButton = tkinter.Button(text="DnC", command=self.start_DnC, master=self.root)
+        self.DnCCompare = tkinter.Label(text="Compare", master=self.root)
+        self.DnCTime = tkinter.Label(text="Time", master=self.root)
+        self.DnCCompareAnswer = tkinter.Label(self.root)
+        self.DnCTimeAnswer = tkinter.Label(self.root)
+        self.closestAnswer = tkinter.Label(text="Closest Pair", master=self.root)
+        self.distLabel = tkinter.Label(text="Distance", master=self.root)
+        self.distLabelAnswer = tkinter.Label(self.root)
+        self.point1Label = tkinter.Label(text="Point 1", master=self.root)
+        self.point1LabelAnswer = tkinter.Label(self.root)
+        self.point2Label = tkinter.Label(text="Point 2", master=self.root)
+        self.point2LabelAnswer = tkinter.Label(self.root)
         
         # error
-        self.amountError = tkinter.Label(font=("Arial", 8), fg='red')
-        self.limitError = tkinter.Label(font=("Arial", 8), fg='red')
-        self.solveError = tkinter.Label(font=("Arial", 8), fg='red')
+        self.amountError = tkinter.Label(font=("Arial", 8), fg='red', master=self.root)
+        self.limitError = tkinter.Label(font=("Arial", 8), fg='red', master=self.root)
+        self.solveError = tkinter.Label(font=("Arial", 10), fg='red', master=self.root)
 
     def position_button(self):
         # constant
         self.label_positionx = 520
-        self.first_y = 10
+        self.first_y = 40
         self.label_gap = 40
         self.form_positionx = 560
         
         self.solve_positionx = 50
-        self.solve_y = 510
+        self.solve_y = 540
         self.solve_gapx = 130
         self.solve_gapy = 30
         self.dist_positionx = 300
@@ -190,7 +190,7 @@ class GUI3D:
         self.axis.remove()
         self.axis = self.figure.add_subplot(projection="3d")
         self.axis.scatter3D(self.points_xyz[0], self.points_xyz[1], self.points_xyz[2], color="red")
-        self.canvas.draw()
+        # self.canvas.draw()
 
     def update_answer(self, method, answer, execTime):
         if method == "Bruteforce":
@@ -252,6 +252,15 @@ class GUI3D:
         self.debug_cursor()
         tkinter.mainloop()
 
+def make_root():
+    # init tkinter
+    frame = tkinter.Tk()
+    frame.wm_title("Closest Pair Visualizer")
+    frame.geometry("720x720")
+    frame.resizable(False, False)
+    return frame
+
 if __name__ == "__main__":
-    program = GUI3D()
+    root = make_root()
+    program = GUI3D(root)
     program.start()
