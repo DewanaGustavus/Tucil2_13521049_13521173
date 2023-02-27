@@ -15,11 +15,11 @@ def merge_sort(list, key_index):
             list[i+j] = list2[j]
             j += 1
         elif j == len(list2):
-            list[j+i] = list1[i]
+            list[i+j] = list1[i]
             i += 1
         else:
             if list1[i][key_index] < list2[j][key_index]:
-                list[j+i] = list1[i]
+                list[i+j] = list1[i]
                 i += 1
             else:
                 list[i+j] = list2[j]

@@ -6,6 +6,7 @@ euclid = Euclid()
 
 def compute_DnC(points):
     assert len(points) > 1, "list should contain at least 2 point"
+    euclid.call_counter = 0
     points = merge_sort(points, 0)
     points = merge_sort(points, 1)
     return DnC(points)
@@ -17,7 +18,6 @@ def conquer_strip(points, min_dist):
         if(abs(point[1] - points[mid][1]) < min_dist):
             strip_points.append(point)
     
-    euclid = Euclid()
     closest_index = (0, 1)
     strip_length = len(strip_points)
     for i in range(strip_length):
@@ -51,7 +51,6 @@ def DnC(points):
         closest_index = answer_right[2]
         
     answer_strip = conquer_strip(points, dist)
-    euclid.call_counter += answer_strip[0]
     if answer_strip[1] < dist:
         dist = answer_strip[1]
         closest_index = answer_strip[2]
