@@ -4,7 +4,7 @@ import tkinter
 import tkinter.ttk
 
 root = tkinter.Tk()
-root.title("Tab Widget")
+root.title("Closest Pair Visualizer")
 tabControl = tkinter.ttk.Notebook(root)
 
 gui1 = GUI3D(tabControl)

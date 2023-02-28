@@ -1,6 +1,7 @@
-def merge_sort(list, key_index):
-    length = len(list)
+def merge_sort(input_list, key_index):
+    length = len(input_list)
     assert length, "List must contain at least 1 element"
+    list = [x for x in input_list]
     if length == 1:
         return list
     mid = length//2
