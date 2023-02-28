@@ -13,10 +13,7 @@ def compute_DnC(points):
     return DnC(pointsx, pointsy)
     
 def conquer_strip(pointsy, mid_x, min_dist):
-    strip_points = []
-    for point in pointsy:
-        if(abs(point[0] - mid_x) <= min_dist):
-            strip_points.append(point)
+    strip_points = [point for point in pointsy if abs(point[0] - mid_x) <= min_dist]
             
     closest_index = (0, 1)
     strip_length = len(strip_points)
@@ -41,9 +38,18 @@ def DnC(pointsx, pointsy):
     mid = length//2
     list1x = pointsx[:mid]
     list2x = pointsx[mid:]
+    mid_x = pointsx[mid-1][0]
     
-    answer_left = DnC(list1x, pointsy)
-    answer_right = DnC(list2x, pointsy)
+    list1y = []
+    list2y = []
+    for point in pointsy:
+        if point[0] <= mid_x:
+            list1y.append(point)
+        if point[0] >= mid_x:
+            list2y.append(point)
+    
+    answer_left = DnC(list1x, list1y)
+    answer_right = DnC(list2x, list2y)
     
     dist = answer_left[1]
     closest_index = answer_left[2]
@@ -51,7 +57,7 @@ def DnC(pointsx, pointsy):
         dist = answer_right[1]
         closest_index = answer_right[2]
         
-    answer_strip = conquer_strip(pointsy, pointsx[mid-1][0], dist)
+    answer_strip = conquer_strip(pointsy, mid_x, dist)
     if answer_strip[1] < dist:
         dist = answer_strip[1]
         closest_index = answer_strip[2]
@@ -86,6 +92,6 @@ def dnc2_driver():
 
             
 if __name__ == "__main__":
-    dnc2_driver()
+    # dnc2_driver()
     loop_driver()
     
