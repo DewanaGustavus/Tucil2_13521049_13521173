@@ -16,8 +16,8 @@ tab2 = gui2.frame
 root.geometry("690x750")
 root.resizable(False, False)
 
-tabControl.add(tab1, text ='3D')
-tabControl.add(tab2, text ='n-D')
-tabControl.pack(expand = 1, fill ="both")
+tabControl.add(tab1, text='3D')
+tabControl.add(tab2, text='n-D')
+tabControl.pack(expand=1, fill="both")
 
 root.mainloop()
