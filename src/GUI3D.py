@@ -241,11 +241,26 @@ class GUI3D:
         self.point1LabelAnswer.place(
             x=self.dist_positionx + self.text_gap, y=self.solve_y + 2*self.dist_gapy)
         self.point1LabelAnswer.config(
-            text=point_to_string(self.points[answer[2][0]]))
+            text=point_to_string(answer[2][0]))
         self.point2LabelAnswer.place(
             x=self.dist_positionx + self.text_gap, y=self.solve_y + 3*self.dist_gapy)
         self.point2LabelAnswer.config(
-            text=point_to_string(self.points[answer[2][1]]))
+            text=point_to_string(answer[2][1]))
+        self.update_plot_answer(answer[2][0], answer[2][1])
+        
+    def update_plot_answer(self, p1, p2):
+        x = [p1[0], p2[0]]
+        y = [p1[1], p2[1]]
+        z = [p1[2], p2[2]]
+
+        self.axis.remove()
+        self.axis = self.figure.add_subplot(projection="3d")
+        self.axis.scatter3D(
+            self.points_xyz[0], self.points_xyz[1], self.points_xyz[2], color="red")
+        self.axis.scatter3D(
+            x, y, z, color="blue")
+        self.axis.plot(x, y, z)
+        self.canvas.draw()
 
     def flatten_xyz(self):
         x, y, z = self.points_xyz
@@ -259,6 +274,7 @@ class GUI3D:
             return
         start = time.time()
         answer = compute_bruteforce(self.points)
+        print(answer)
         end = time.time()
         self.update_answer("Bruteforce", answer, end - start)
 
@@ -268,8 +284,9 @@ class GUI3D:
             return
         start = time.time()
         answer = compute_DnC(self.points)
+        print(answer)
         end = time.time()
-        self.update_ansFer("DnC", answer, end - start)
+        self.update_answer("DnC", answer, end - start)
 
     def debug_cursor(self):
         self.cursor_pos = tkinter.Label(self.frame)

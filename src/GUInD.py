@@ -227,11 +227,11 @@ class GUInD:
         self.point1LabelAnswer.place(
             x=self.label_positionx + self.text_gap, y=self.solve_y + 2*self.dist_gapy)
         self.point1LabelAnswer.config(
-            text=point_to_string(self.points[answer[2][0]]))
+            text=point_to_string(answer[2][0]))
         self.point2LabelAnswer.place(
             x=self.label_positionx + self.text_gap, y=self.solve_y + 3*self.dist_gapy)
         self.point2LabelAnswer.config(
-            text=point_to_string(self.points[answer[2][1]]))
+            text=point_to_string(answer[2][1]))
 
     def start_bruteforce(self):
         if len(self.points) == 0:
