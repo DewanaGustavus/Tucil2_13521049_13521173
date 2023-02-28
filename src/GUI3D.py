@@ -15,7 +15,7 @@ class GUI3D:
         self.root = root
         self.frame = tkinter.ttk.Frame(self.root)
         # init mpl figure 
-        self.figure = Figure(figsize = (5, 5), facecolor='yellow')
+        self.figure = Figure(figsize = (4, 4), facecolor='white')
         self.axis = self.figure.add_subplot(projection="3d")
         self.points = []
         self.points_xyz = [[], [], []]
@@ -28,7 +28,7 @@ class GUI3D:
         self.canvas = FigureCanvasTkAgg(self.figure, master=self.frame)
         self.toolbar = NavigationToolbar2Tk(self.canvas, self.root, pack_toolbar=False)
         self.toolbar.update()
-        self.toolbar.place(x=20, y=480)
+        self.toolbar.place(y=423)
         self.canvas.get_tk_widget().place(x=0, y=0)
         self.canvas.draw()
         
@@ -37,21 +37,21 @@ class GUI3D:
         
     def make_button(self):
         # make generate button
-        self.amountLabel = tkinter.Label(text="Points", master=self.frame)
-        self.amountForm = tkinter.Entry(background='red', master=self.frame)
-        self.limitLabel = tkinter.Label(text="Limit", master=self.frame)
-        self.limitForm = tkinter.Entry(background='red', master=self.frame)
-        self.generateButton = tkinter.Button(text="Generate", command=self.update_points, master=self.frame)
+        self.amountLabel = tkinter.Label(text="Points", font=("Poppins"), master=self.frame)
+        self.amountForm = tkinter.Entry(background='#FAFAFA', font=("Poppins"),master=self.frame)
+        self.limitLabel = tkinter.Label(text="Limit", font=("Poppins"),master=self.frame)
+        self.limitForm = tkinter.Entry(background='#FAFAFA',font=("Poppins"), master=self.frame)
+        self.generateButton = tkinter.Button(text="Generate",font=("Poppins"),bg="#495464",fg="#FAFAFA", command=self.update_points, master=self.frame)
         
         # points
-        self.pointsLabel = tkinter.Label(text="Points", master=self.frame)
+        self.pointsLabel = tkinter.Label(text="Points",font=("Poppins"), master=self.frame)
         self.pointsFrame = tkinter.Frame(self.root)
         self.pointsScrollbarY = tkinter.Scrollbar(self.pointsFrame)
         self.pointsScrollbarX = tkinter.Scrollbar(self.pointsFrame, orient="horizontal")
-        self.pointsText = tkinter.Text(self.pointsFrame, height=30, width=20, wrap="none",
+        self.pointsText = tkinter.Text(self.pointsFrame, height=30, width=30, wrap="none",
                                        yscrollcommand=self.pointsScrollbarY.set, 
-                                       xscrollcommand=self.pointsScrollbarX.set, 
-                                       background='green')
+                                       xscrollcommand=self.pointsScrollbarX.set, font=("Poppins"),
+                                       background='#E8E8E8')
         self.pointsText.configure(state="disabled")
         self.pointsScrollbarY.pack(side=tkinter.RIGHT, fill=tkinter.Y)
         self.pointsScrollbarX.pack(side=tkinter.BOTTOM, fill=tkinter.X)
@@ -60,12 +60,12 @@ class GUI3D:
         self.pointsText.pack(side="left")
         
         # solve button
-        self.bruteButton = tkinter.Button(text="Bruteforce", command=self.start_bruteforce, master=self.frame)
+        self.bruteButton = tkinter.Button(text="BruteForce",font=("Poppins"),bg="#495464",fg="#FAFAFA", command=self.start_bruteforce, master=self.frame)
         self.bruteCompare = tkinter.Label(text="Compare", master=self.frame)
         self.bruteTime = tkinter.Label(text="Time", master=self.frame)
         self.bruteCompareAnswer = tkinter.Label(self.frame)
         self.bruteTimeAnswer = tkinter.Label(self.frame)
-        self.DnCButton = tkinter.Button(text="DnC", command=self.start_DnC, master=self.frame)
+        self.DnCButton = tkinter.Button(text="DnC",font=("Poppins"),bg="#495464",fg="#FAFAFA", command=self.start_DnC, master=self.frame)
         self.DnCCompare = tkinter.Label(text="Compare", master=self.frame)
         self.DnCTime = tkinter.Label(text="Time", master=self.frame)
         self.DnCCompareAnswer = tkinter.Label(self.frame)
@@ -85,16 +85,16 @@ class GUI3D:
 
     def position_button(self):
         # constant
-        self.label_positionx = 520
+        self.label_positionx = 400
         self.first_y = 0
         self.label_gap = 40
-        self.form_positionx = 560
+        self.form_positionx = 480
         
-        self.solve_positionx = 50
-        self.solve_y = 540
+        self.solve_positionx = 15
+        self.solve_y = 450
         self.solve_gapx = 130
         self.solve_gapy = 30
-        self.dist_positionx = 300
+        self.dist_positionx = 215
         self.dist_gapy = 20
         self.text_gap = 70
         
@@ -103,19 +103,19 @@ class GUI3D:
         self.amountForm.place(x=self.form_positionx, y=self.first_y)
         self.limitLabel.place(x=self.label_positionx, y=self.first_y + self.label_gap)
         self.limitForm.place(x=self.form_positionx, y=self.first_y + self.label_gap)
-        self.generateButton.place(x=self.form_positionx, y=self.first_y + 2*self.label_gap)
+        self.generateButton.place(x=585, y=self.first_y + 2*self.label_gap)
 
         # points
-        self.pointsLabel.place(x=self.form_positionx, y=self.first_y + 3*self.label_gap)
-        self.pointsFrame.place(x=self.label_positionx, y=self.first_y + 4*self.label_gap)
+        self.pointsLabel.place(x=510, y=self.first_y + 3*self.label_gap)
+        self.pointsFrame.place(x=self.label_positionx+2, y=self.first_y + 4.5*self.label_gap)
 
         # solve
         self.bruteButton.place(x=self.solve_positionx, y=self.solve_y)
-        self.bruteCompare.place(x=self.solve_positionx, y=self.solve_y + 2*self.solve_gapy)
-        self.bruteTime.place(x=self.solve_positionx, y=self.solve_y + 3*self.solve_gapy)
+        self.bruteCompare.place(x=self.solve_positionx, y=self.solve_y + 3*self.solve_gapy)
+        self.bruteTime.place(x=self.solve_positionx, y=self.solve_y + 4*self.solve_gapy)
         self.DnCButton.place(x=self.solve_positionx + self.solve_gapx, y=self.solve_y)
-        self.DnCCompare.place(x=self.solve_positionx + self.solve_gapx, y=self.solve_y + 2*self.solve_gapy)
-        self.DnCTime.place(x=self.solve_positionx + self.solve_gapx, y=self.solve_y + 3*self.solve_gapy)
+        self.DnCCompare.place(x=self.solve_positionx + self.solve_gapx, y=self.solve_y + 3*self.solve_gapy)
+        self.DnCTime.place(x=self.solve_positionx + self.solve_gapx, y=self.solve_y + 4*self.solve_gapy)
         self.closestAnswer.place(x=self.dist_positionx, y=self.solve_y)
         self.distLabel.place(x=self.dist_positionx, y=self.solve_y + self.dist_gapy)
         self.point1Label.place(x=self.dist_positionx, y=self.solve_y + 2*self.dist_gapy)
@@ -138,7 +138,7 @@ class GUI3D:
         
         self.amountError.place(x=self.label_positionx, y=self.first_y + (self.label_gap)//2)
         self.limitError.place(x=self.label_positionx, y=self.first_y + 3 * (self.label_gap)//2)
-        self.solveError.place(x=self.solve_positionx + 20, y=self.solve_y + self.solve_gapy)
+        self.solveError.place(x=self.solve_positionx + 7, y=self.solve_y + self.solve_gapy+15)
 
     def reset_error(self):
         self.amountError.place_forget()
@@ -190,14 +190,14 @@ class GUI3D:
 
     def update_answer(self, method, answer, execTime):
         if method == "Bruteforce":
-            self.bruteCompareAnswer.place(x=self.solve_positionx + self.text_gap, y=self.solve_y + 2*self.solve_gapy)
+            self.bruteCompareAnswer.place(x=self.solve_positionx + self.text_gap, y=self.solve_y + 3*self.solve_gapy)
             self.bruteCompareAnswer.config(text=answer[0])
-            self.bruteTimeAnswer.place(x=self.solve_positionx + self.text_gap, y=self.solve_y + 3*self.solve_gapy)
+            self.bruteTimeAnswer.place(x=self.solve_positionx + self.text_gap, y=self.solve_y + 4*self.solve_gapy)
             self.bruteTimeAnswer.config(text=f"{execTime*1000:0.2f} ms")
         else:
-            self.DnCCompareAnswer.place(x=self.solve_positionx + self.solve_gapx + self.text_gap, y=self.solve_y + 2*self.solve_gapy)
+            self.DnCCompareAnswer.place(x=self.solve_positionx + self.solve_gapx + self.text_gap, y=self.solve_y + 3*self.solve_gapy)
             self.DnCCompareAnswer.config(text=answer[0])
-            self.DnCTimeAnswer.place(x=self.solve_positionx + self.solve_gapx + self.text_gap, y=self.solve_y + 3*self.solve_gapy)
+            self.DnCTimeAnswer.place(x=self.solve_positionx + self.solve_gapx + self.text_gap, y=self.solve_y + 4*self.solve_gapy)
             self.DnCTimeAnswer.config(text=f"{execTime*1000:0.2f} ms")
 
         self.distLabelAnswer.place(x=self.dist_positionx + self.text_gap, y=self.solve_y + self.dist_gapy)
@@ -245,7 +245,7 @@ def make_root():
     # init tkinter
     frame = tkinter.Tk()
     frame.wm_title("Closest Pair Visualizer")
-    frame.geometry("720x720")
+    frame.geometry("690x720")
     frame.resizable(False, False)
     return frame
 

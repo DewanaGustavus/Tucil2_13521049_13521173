@@ -13,7 +13,7 @@ tab1 = gui1.frame
 gui2 = GUInD(tabControl)
 tab2 = gui2.frame
 
-root.geometry("750x750")
+root.geometry("690x750")
 root.resizable(False, False)
 
 tabControl.add(tab1, text ='3D')
