@@ -157,7 +157,7 @@ class GUInD:
                                y=self.first_y + 3*self.error_gap)
         self.limitError.place(x=self.label_positionx,
                               y=self.first_y + 5*self.error_gap)
-        self.solveError.place(x=self.label_positionx + 20, y=5*self.label_gap)
+        self.solveError.place(x=self.label_positionx + 20, y=3*self.label_gap)
 
     def reset_error(self):
         self.amountError.place_forget()
