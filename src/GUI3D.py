@@ -107,12 +107,12 @@ class GUI3D:
         self.form_positionx = 480
 
         self.solve_positionx = 15
-        self.solve_y = 450
+        self.solve_y = 440
         self.solve_gapx = 130
         self.solve_gapy = 30
-        self.dist_positionx = 215
         self.dist_gapy = 20
         self.text_gap = 70
+        self.solve_display = 530
 
         # input
         self.amountLabel.place(x=self.label_positionx, y=self.first_y)
@@ -131,22 +131,22 @@ class GUI3D:
         # solve
         self.bruteButton.place(x=self.solve_positionx, y=self.solve_y)
         self.bruteCompare.place(x=self.solve_positionx,
-                                y=self.solve_y + 3*self.solve_gapy)
+                                y=self.solve_y + 1.1*self.solve_gapy)
         self.bruteTime.place(x=self.solve_positionx,
-                             y=self.solve_y + 4*self.solve_gapy)
+                             y=self.solve_y + 2.1*self.solve_gapy)
         self.DnCButton.place(x=self.solve_positionx +
                              self.solve_gapx, y=self.solve_y)
         self.DnCCompare.place(
-            x=self.solve_positionx + self.solve_gapx, y=self.solve_y + 3*self.solve_gapy)
+            x=self.solve_positionx + self.solve_gapx, y=self.solve_y + 1.1*self.solve_gapy)
         self.DnCTime.place(x=self.solve_positionx +
-                           self.solve_gapx, y=self.solve_y + 4*self.solve_gapy)
-        self.closestAnswer.place(x=self.dist_positionx, y=self.solve_y)
-        self.distLabel.place(x=self.dist_positionx,
-                             y=self.solve_y + self.dist_gapy)
-        self.point1Label.place(x=self.dist_positionx,
-                               y=self.solve_y + 2*self.dist_gapy)
-        self.point2Label.place(x=self.dist_positionx,
-                               y=self.solve_y + 3*self.dist_gapy)
+                           self.solve_gapx, y=self.solve_y + 2.1*self.solve_gapy)
+        self.closestAnswer.place(x=self.solve_positionx, y=self.solve_display)
+        self.distLabel.place(x=self.solve_positionx,
+                             y=self.solve_display + self.dist_gapy)
+        self.point1Label.place(x=self.solve_positionx,
+                               y=self.solve_display + 2*self.dist_gapy)
+        self.point2Label.place(x=self.solve_positionx,
+                               y=self.solve_display + 3*self.dist_gapy)
 
     def update_points_text(self):
         self.reset_error()
@@ -222,32 +222,32 @@ class GUI3D:
     def update_answer(self, method, answer, execTime):
         if method == "Bruteforce":
             self.bruteCompareAnswer.place(
-                x=self.solve_positionx + self.text_gap, y=self.solve_y + 3*self.solve_gapy)
+                x=self.solve_positionx + self.text_gap, y=self.solve_y + 1.1*self.solve_gapy)
             self.bruteCompareAnswer.config(text=answer[0])
             self.bruteTimeAnswer.place(
-                x=self.solve_positionx + self.text_gap, y=self.solve_y + 4*self.solve_gapy)
+                x=self.solve_positionx + self.text_gap, y=self.solve_y + 2.1*self.solve_gapy)
             self.bruteTimeAnswer.config(text=f"{execTime*1000:0.2f} ms")
         else:
             self.DnCCompareAnswer.place(
-                x=self.solve_positionx + self.solve_gapx + self.text_gap, y=self.solve_y + 3*self.solve_gapy)
+                x=self.solve_positionx + self.solve_gapx + self.text_gap, y=self.solve_y + 1.1*self.solve_gapy)
             self.DnCCompareAnswer.config(text=answer[0])
             self.DnCTimeAnswer.place(
-                x=self.solve_positionx + self.solve_gapx + self.text_gap, y=self.solve_y + 4*self.solve_gapy)
+                x=self.solve_positionx + self.solve_gapx + self.text_gap, y=self.solve_y + 2.2*self.solve_gapy)
             self.DnCTimeAnswer.config(text=f"{execTime*1000:0.2f} ms")
 
         self.distLabelAnswer.place(
-            x=self.dist_positionx + self.text_gap, y=self.solve_y + self.dist_gapy)
+            x=self.solve_positionx + self.text_gap, y=self.solve_display + self.dist_gapy)
         self.distLabelAnswer.config(text=f"{answer[1]:0.2f}")
         self.point1LabelAnswer.place(
-            x=self.dist_positionx + self.text_gap, y=self.solve_y + 2*self.dist_gapy)
+            x=self.solve_positionx + self.text_gap, y=self.solve_display + 2*self.dist_gapy)
         self.point1LabelAnswer.config(
             text=point_to_string(answer[2][0]))
         self.point2LabelAnswer.place(
-            x=self.dist_positionx + self.text_gap, y=self.solve_y + 3*self.dist_gapy)
+            x=self.solve_positionx + self.text_gap, y=self.solve_display + 3*self.dist_gapy)
         self.point2LabelAnswer.config(
             text=point_to_string(answer[2][1]))
         self.update_plot_answer(answer[2][0], answer[2][1])
-        
+
     def update_plot_answer(self, p1, p2):
         x = [p1[0], p2[0]]
         y = [p1[1], p2[1]]
