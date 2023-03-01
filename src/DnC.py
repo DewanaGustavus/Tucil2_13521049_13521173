@@ -14,13 +14,21 @@ def compute_DnC(points):
     
 def conquer_strip(pointsy, mid_x, min_dist):
     strip_points = [point for point in pointsy if abs(point[0] - mid_x) <= min_dist]
-            
+    dimension = len(pointsy[0])
+    
     closest_pair = (0, 0)
     strip_length = len(strip_points)
     for i in range(strip_length):
         for j in range(i+1, strip_length):
             if abs(strip_points[i][1] - strip_points[j][1]) >= min_dist:
                 break
+            skip = False
+            for d in range(2, dimension):
+                if abs(strip_points[i][d] - strip_points[j][d]) >= min_dist:
+                    skip = True
+                    break
+            if skip:
+                continue
             new_dist = euclid.distance(strip_points[i], strip_points[j])
             if new_dist < min_dist:
                 min_dist = new_dist
