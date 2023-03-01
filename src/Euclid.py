@@ -1,9 +1,10 @@
 from math import sqrt
 
+
 class Euclid:
     def __init__(self):
         self.call_counter = 0
-        
+
     def distance(self, p1, p2):
         assert len(p1) == len(p2), "Both point should have equal length"
         self.call_counter += 1

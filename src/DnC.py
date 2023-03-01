@@ -5,17 +5,20 @@ from Randomizer import *
 
 euclid = Euclid()
 
+
 def compute_DnC(points):
     assert len(points) > 1, "list should contain at least 2 point"
     euclid.call_counter = 0
     pointsx = merge_sort(points, 0)
     pointsy = merge_sort(points, 1)
     return DnC(pointsx, pointsy)
-    
+
+
 def conquer_strip(pointsy, mid_x, min_dist):
-    strip_points = [point for point in pointsy if abs(point[0] - mid_x) <= min_dist]
+    strip_points = [point for point in pointsy if abs(
+        point[0] - mid_x) <= min_dist]
     dimension = len(pointsy[0])
-    
+
     closest_pair = (0, 0)
     strip_length = len(strip_points)
     for i in range(strip_length):
@@ -33,8 +36,9 @@ def conquer_strip(pointsy, mid_x, min_dist):
             if new_dist < min_dist:
                 min_dist = new_dist
                 closest_pair = (strip_points[i], strip_points[j])
-    
+
     return euclid.call_counter, min_dist, closest_pair
+
 
 def DnC(pointsx, pointsy):
     length = len(pointsx)
@@ -42,12 +46,12 @@ def DnC(pointsx, pointsy):
         answer_brute = compute_bruteforce(pointsx)
         euclid.call_counter += answer_brute[0]
         return answer_brute
-    
+
     mid = length//2
     list1x = pointsx[:mid]
     list2x = pointsx[mid:]
     mid_x = pointsx[mid-1][0]
-    
+
     list1y = []
     list2y = []
     for point in pointsy:
@@ -55,22 +59,23 @@ def DnC(pointsx, pointsy):
             list1y.append(point)
         if point[0] >= mid_x:
             list2y.append(point)
-    
+
     answer_left = DnC(list1x, list1y)
     answer_right = DnC(list2x, list2y)
-    
+
     dist = answer_left[1]
     closest_pair = answer_left[2]
     if answer_right[1] < dist:
         dist = answer_right[1]
         closest_pair = answer_right[2]
-        
+
     answer_strip = conquer_strip(pointsy, mid_x, dist)
     if answer_strip[1] < dist:
         dist = answer_strip[1]
         closest_pair = answer_strip[2]
 
     return euclid.call_counter, dist, closest_pair
+
 
 def loop_driver():
     for i in range(1000):
@@ -82,6 +87,7 @@ def loop_driver():
             print(dist)
             print(dist2)
             print()
+
 
 def dnc2_driver():
     for i in range(10):
@@ -98,9 +104,8 @@ def dnc2_driver():
         print(f"distance DnC2 : {dist3}")
         print()
 
-            
+
 if __name__ == "__main__":
     dnc2_driver()
-    
+
     # loop_driver()
-    

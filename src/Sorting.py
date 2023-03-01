@@ -27,13 +27,14 @@ def merge_sort(input_list, key_index):
                 j += 1
     return list
 
+
 if __name__ == "__main__":
     import random
-    list = [[random.randint(1,20), random.randint(0,3)] for i in range(10)]
+    list = [[random.randint(1, 20), random.randint(0, 3)] for i in range(10)]
     print(list)
     list = merge_sort(list, 0)
     print(list)
-    list = [[random.randint(1,20), random.randint(0,3)] for i in range(10)]
+    list = [[random.randint(1, 20), random.randint(0, 3)] for i in range(10)]
     print(list)
     list = merge_sort(list, 1)
     print(list)

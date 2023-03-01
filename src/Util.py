@@ -5,6 +5,7 @@ def point_to_string(point):
     string = string[:-2] + ")"
     return string
 
+
 def validate_n(n):
     try:
         n = int(n)
@@ -15,12 +16,14 @@ def validate_n(n):
     except:
         return "please input an integer"
 
+
 def validate_limit(limit):
     try:
         limit = float(limit)
         return limit
     except:
         return "please input correct decimal value"
+
 
 def validate_d(d):
     try:
